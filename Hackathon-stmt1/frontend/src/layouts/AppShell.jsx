@@ -1,0 +1,96 @@
+import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { BadgeCheck, FileCheck2, LayoutDashboard, LogOut, Shield, User } from 'lucide-react'
+import { useAuth } from '../context/AuthContext.jsx'
+
+function ShellLink({ to, icon: Icon, label }) {
+  return (
+    <NavLink
+      to={to}
+      end={to === '/app'}
+      className={({ isActive }) =>
+        [
+          'flex items-center gap-3 rounded-2xl px-3 py-2 text-sm transition',
+          isActive
+            ? 'bg-white/15 text-white shadow-soft border border-white/10'
+            : 'text-white/70 hover:text-white hover:bg-white/10',
+        ].join(' ')
+      }
+    >
+      <Icon className="h-4 w-4" />
+      <span className="font-medium">{label}</span>
+    </NavLink>
+  )
+}
+
+export default function AppShell() {
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  return (
+    <div className="min-h-full">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
+          <aside className="glass-card p-4 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
+            <div className="flex items-center justify-between px-2 py-2">
+              <button
+                onClick={() => navigate('/app')}
+                className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-left hover:bg-white/10"
+              >
+                <div className="grid h-9 w-9 place-items-center rounded-2xl bg-gradient-to-br from-blue-500/70 to-purple-500/70 shadow-soft">
+                  <Shield className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold leading-tight">Identity Trust</div>
+                  <div className="text-xs text-white/60">Verification Platform</div>
+                </div>
+              </button>
+
+              {user?.isAdmin ? (
+                <NavLink
+                  to="/admin"
+                  className="rounded-xl border border-white/15 bg-white/10 px-2 py-1 text-xs text-white/80 hover:bg-white/15"
+                >
+                  Admin
+                </NavLink>
+              ) : null}
+            </div>
+
+            <div className="mt-3 space-y-1">
+              <ShellLink to="/app" icon={LayoutDashboard} label="Dashboard" />
+              <ShellLink to="/app/profile" icon={User} label="Profile" />
+              <ShellLink to="/app/verification" icon={FileCheck2} label="Verification" />
+              <ShellLink to="/app/reports" icon={BadgeCheck} label="Reports" />
+            </div>
+
+            <div className="mt-6 border-t border-white/10 pt-4">
+              <div className="px-2">
+                <div className="text-xs text-white/60">Signed in as</div>
+                <div className="mt-1 truncate text-sm font-medium">{user?.email || '—'}</div>
+              </div>
+              <button
+                onClick={logout}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-3 py-2 text-sm text-white/80 hover:bg-white/15"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </button>
+            </div>
+          </aside>
+
+          <main className="min-w-0">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="space-y-6"
+            >
+              <Outlet />
+            </motion.div>
+          </main>
+        </div>
+      </div>
+    </div>
+  )
+}
+

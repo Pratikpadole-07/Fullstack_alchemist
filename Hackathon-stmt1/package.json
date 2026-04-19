@@ -1,0 +1,14 @@
+{
+  "name": "identity-verification-trust-platform",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Full-stack MERN Identity Verification & Trust Platform",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "dev": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "seed": "npm --prefix backend run seed",
+    "start": "npm --prefix backend start"
+  }
+}
+
