@@ -45,4 +45,5 @@ Frontend runs on `http://localhost:5173`.
 
 - OTP verification is demo-mode: the code is **123456**.
 - ID/selfie uploads are stored on disk in `backend/uploads/`.
+-
 
